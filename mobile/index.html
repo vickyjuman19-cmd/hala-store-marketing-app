@@ -1175,16 +1175,25 @@ function logoutUser(){
 
 document.addEventListener("DOMContentLoaded", function(){
 
-  if(localStorage.getItem("halaLoggedIn") === "yes"){
+ if(localStorage.getItem("halaLoggedIn") === "yes"){
 
-    const login =
-      document.getElementById("loginScreen");
+  const login =
+    document.getElementById("loginScreen");
 
-    if(login){
-      login.style.display = "none";
-    }
-
+  if(login){
+    login.style.display = "none";
   }
+
+}else{
+
+  const login =
+    document.getElementById("loginScreen");
+
+  if(login){
+    login.style.display = "block";
+  }
+
+}
 
 });
 </script>
