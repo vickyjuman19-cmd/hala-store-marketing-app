@@ -426,7 +426,13 @@ Store saved successfully!
 <h3 style="margin-top:22px;">
 Products
 </h3>
-
+<input
+  id="productSearch"
+  type="text"
+  placeholder="🔍 Search product..."
+  oninput="renderProducts()"
+  style="margin:10px 0 15px;width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;"
+>
 <div id="products" class="product-list"></div>
 
 </div>
@@ -580,7 +586,17 @@ function renderProducts(){
 
   box.innerHTML="";
 
-  products.forEach((product,index)=>{
+  const search =
+  (document.getElementById("productSearch")?.value || "")
+  .toLowerCase()
+  .trim();
+
+const filteredProducts =
+  products.filter(product =>
+    product.name.toLowerCase().includes(search)
+  );
+
+filteredProducts.forEach((product,index)=>{
 
     const card=document.createElement("div");
 
@@ -606,7 +622,7 @@ function renderProducts(){
           <label>Quantity</label>
 
           <input
-            id="qty_${index}"
+            id="qty_${products.indexOf(product)}"
             type="number"
             min="1"
             value="1"
@@ -617,7 +633,7 @@ function renderProducts(){
           <label>Rate ₹</label>
 
           <input
-            id="rate_${index}"
+            id="rate_${products.indexOf(product)}"
             type="number"
             min="0"
             value="${product.price}"
@@ -628,7 +644,7 @@ function renderProducts(){
 
       <button
         class="primary add-btn"
-        onclick="addToOrder(${index})"
+        onclick="addToOrder(products.indexOf(product))"
       >
         + Add to Order
       </button>
