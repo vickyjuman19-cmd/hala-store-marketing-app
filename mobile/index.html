@@ -276,11 +276,78 @@ textarea{
     font-size:23px;
   }
 }
+  /* LOGIN SYSTEM */
+
+.login-screen{
+  max-width:420px;
+  margin:60px auto;
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.login-screen h2{
+  text-align:center;
+  color:#075e54;
+  margin-bottom:25px;
+}
+
+.login-screen input{
+  width:100%;
+  padding:14px;
+  margin:8px 0 15px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.login-screen button{
+  width:100%;
+  padding:14px;
+  background:#087f70;
+  color:white;
+  border:0;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:16px;
+}
+
+.logout-btn{
+  background:#b42318;
+  color:white;
+  padding:10px 16px;
+  border:0;
+  border-radius:10px;
+  font-weight:bold;
+}
 </style>
 </head>
 
 <body>
+<div id="loginScreen" class="login-screen">
 
+  <h2>HALA Store Marketing</h2>
+
+  <input
+    type="text"
+    id="loginUser"
+    placeholder="Username"
+  >
+
+  <input
+    type="password"
+    id="loginPass"
+    placeholder="Password"
+  >
+
+  <button onclick="loginUser()">
+    LOGIN
+  </button>
+
+  <p id="loginError"></p>
+
+</div>
 <div class="header">
   <h1>HALA Store Marketing</h1>
   <p>Store Visit • Order • Sales Management</p>
@@ -1069,6 +1136,52 @@ function renderHistory(){
 document.addEventListener("DOMContentLoaded", function(){
 
   updateDashboard();
+
+});
+  function loginUser(){
+
+  const username =
+    document.getElementById("loginUser").value.trim();
+
+  const password =
+    document.getElementById("loginPass").value;
+
+  if(username === "admin" && password === "1234"){
+
+    localStorage.setItem("halaLoggedIn","yes");
+
+    document.getElementById("loginScreen").style.display = "none";
+
+    alert("Login Successful");
+
+  }else{
+
+    document.getElementById("loginError").textContent =
+      "Invalid Username or Password";
+
+  }
+}
+
+function logoutUser(){
+
+  localStorage.removeItem("halaLoggedIn");
+
+  location.reload();
+
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  if(localStorage.getItem("halaLoggedIn") === "yes"){
+
+    const login =
+      document.getElementById("loginScreen");
+
+    if(login){
+      login.style.display = "none";
+    }
+
+  }
 
 });
 </script>
