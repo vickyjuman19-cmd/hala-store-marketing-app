@@ -1,0 +1,11 @@
+{
+  "name": "HALA Store Marketing App",
+  "short_name": "HALA Store",
+  "description": "HALA Homecare Store Marketing and Sales App",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#173330",
+  "orientation": "portrait",
+  "icons": []
+}
