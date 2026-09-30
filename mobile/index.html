@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075e54">
 <title>HALA Store Marketing</title>
 
 <style>
@@ -23,19 +24,20 @@ body{
   color:white;
   padding:25px 18px;
   border-radius:0 0 25px 25px;
+  box-shadow:0 5px 18px rgba(0,0,0,.15);
 }
 
 .header h1{
-  font-size:26px;
+  font-size:27px;
 }
 
 .header p{
-  margin-top:6px;
-  opacity:.9;
+  margin-top:7px;
+  opacity:.92;
 }
 
 .container{
-  max-width:750px;
+  max-width:800px;
   margin:auto;
   padding:18px;
 }
@@ -43,7 +45,8 @@ body{
 .menu{
   display:flex;
   gap:10px;
-  overflow:auto;
+  overflow-x:auto;
+  padding-bottom:5px;
   margin-bottom:18px;
 }
 
@@ -53,6 +56,7 @@ button{
   padding:13px 18px;
   font-weight:bold;
   cursor:pointer;
+  font-size:14px;
 }
 
 .primary{
@@ -65,6 +69,11 @@ button{
   color:#075e54;
 }
 
+.danger{
+  background:#ffe4e4;
+  color:#b42318;
+}
+
 .card{
   background:white;
   padding:18px;
@@ -75,7 +84,11 @@ button{
 
 h2{
   margin-bottom:15px;
-  font-size:20px;
+  font-size:21px;
+}
+
+h3{
+  margin-bottom:12px;
 }
 
 .stats{
@@ -94,7 +107,8 @@ h2{
 .stat strong{
   display:block;
   font-size:25px;
-  margin-top:5px;
+  margin-top:6px;
+  color:#075e54;
 }
 
 label{
@@ -111,10 +125,12 @@ input,textarea,select{
   border:1px solid #d5dfdd;
   border-radius:10px;
   font-size:15px;
+  background:white;
 }
 
 textarea{
   min-height:80px;
+  resize:vertical;
 }
 
 .form-row{
@@ -124,12 +140,140 @@ textarea{
 }
 
 .hidden{
+  display:none!important;
+}
+
+.product-list{
+  display:grid;
+  gap:10px;
+}
+
+.product-card{
+  border:1px solid #dce8e5;
+  border-radius:14px;
+  padding:14px;
+  background:#fbfefd;
+}
+
+.product-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.product-name{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.product-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+
+.product-controls input{
+  min-width:0;
+}
+
+.add-btn{
+  width:100%;
+  margin-top:10px;
+}
+
+.order-items{
+  margin-top:15px;
+}
+
+.order-item{
+  border:1px solid #dce8e5;
+  border-radius:14px;
+  padding:13px;
+  margin-bottom:10px;
+  background:#f8fcfb;
+}
+
+.order-item-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+
+.order-item-name{
+  font-weight:bold;
+}
+
+.order-item-details{
+  margin-top:7px;
+  font-size:14px;
+  color:#536563;
+}
+
+.total-box{
+  background:#075e54;
+  color:white;
+  padding:18px;
+  border-radius:16px;
+  margin-top:15px;
+}
+
+.total-box .total{
+  font-size:27px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.success{
+  background:#e8f8f1;
+  color:#087f70;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
   display:none;
+  font-weight:bold;
+}
+
+.history-item{
+  border-left:4px solid #087f70;
+  padding:13px;
+  background:#f8fcfb;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+.history-item strong{
+  color:#075e54;
+}
+
+.empty{
+  text-align:center;
+  padding:20px;
+  color:#71807d;
+}
+
+.small{
+  font-size:13px;
+  color:#667774;
 }
 
 @media(max-width:550px){
   .form-row{
     grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .product-controls{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .header h1{
+    font-size:23px;
   }
 }
 </style>
@@ -145,62 +289,78 @@ textarea{
 <div class="container">
 
 <div class="menu">
-  <button class="primary" onclick="showPage('dashboard')">
-    Dashboard
-  </button>
 
-  <button class="secondary" onclick="showPage('store')">
-    + Add Store
-  </button>
+<button class="primary" onclick="showPage('dashboard')">
+Dashboard
+</button>
 
-  <button class="secondary" onclick="showPage('order')">
-    + New Order
-  </button>
+<button class="secondary" onclick="showPage('store')">
++ Add Store
+</button>
+
+<button class="secondary" onclick="showPage('order')">
++ New Order
+</button>
+
+<button class="secondary" onclick="showPage('history')">
+Order History
+</button>
+
 </div>
+
+
+<!-- DASHBOARD -->
 
 <div id="dashboard">
 
 <div class="stats">
 
 <div class="stat">
-  Total Stores
-  <strong id="storeCount">0</strong>
+Total Stores
+<strong id="storeCount">0</strong>
 </div>
 
 <div class="stat">
-  Today's Orders
-  <strong id="orderCount">0</strong>
+Today's Orders
+<strong id="orderCount">0</strong>
 </div>
 
 <div class="stat">
-  Today's Sales
-  <strong id="sales">₹0</strong>
+Today's Sales
+<strong id="sales">₹0</strong>
 </div>
 
 <div class="stat">
-  Follow-ups
-  <strong id="followups">0</strong>
+Follow-ups
+<strong id="followups">0</strong>
 </div>
 
 </div>
 
 <div class="card" style="margin-top:15px;">
+
 <h2>HALA Salesman App</h2>
 
-<p>1. Add new shop</p>
+<p>✓ Add new shop</p>
 <br>
 
-<p>2. Capture shop details</p>
+<p>✓ Capture shop details</p>
 <br>
 
-<p>3. Create product order</p>
+<p>✓ Select products</p>
 <br>
 
-<p>4. Maintain complete order history</p>
+<p>✓ Add multiple products to same order</p>
+<br>
+
+<p>✓ Maintain complete order history</p>
 
 </div>
 
 </div>
+
+
+<!-- ADD STORE -->
 
 <div id="store" class="hidden">
 
@@ -218,12 +378,12 @@ textarea{
 
 <div>
 <label>Contact Number *</label>
-<input id="phone" type="tel" placeholder="10 digit mobile">
+<input id="phone" type="tel" maxlength="10" placeholder="10 digit mobile">
 </div>
 
 <div>
 <label>Pincode *</label>
-<input id="pincode" inputmode="numeric" placeholder="412101">
+<input id="pincode" inputmode="numeric" maxlength="6" placeholder="412101">
 </div>
 
 </div>
@@ -232,7 +392,7 @@ textarea{
 <textarea id="address" placeholder="Enter complete shop address"></textarea>
 
 <label>Map Location</label>
-<input id="location" placeholder="GPS / Google Maps location">
+<input id="location" placeholder="Google Maps location">
 
 <br><br>
 
@@ -240,9 +400,16 @@ textarea{
 Save Store
 </button>
 
+<div id="storeSuccess" class="success">
+Store saved successfully!
 </div>
 
 </div>
+
+</div>
+
+
+<!-- NEW ORDER -->
 
 <div id="order" class="hidden">
 
@@ -250,29 +417,75 @@ Save Store
 
 <h2>Create New Order</h2>
 
-<label>Store Name</label>
+<label>Store Name *</label>
 <input id="orderStore" placeholder="Enter store name">
 
 <label>Salesman Employee ID</label>
 <input id="employeeId" placeholder="Employee ID">
 
-<h3 style="margin-top:20px;">
+<h3 style="margin-top:22px;">
 Products
 </h3>
 
-<div id="products"></div>
+<div id="products" class="product-list"></div>
+
+</div>
+
+
+<!-- CURRENT ORDER -->
+
+<div class="card">
+
+<h2>Current Order</h2>
+
+<p class="small">
+Products added using "Add to Order" will stay here.
+You can continue adding products without leaving this page.
+</p>
+
+<div id="orderItems" class="order-items">
+<div class="empty">
+No products added yet.
+</div>
+</div>
+
+<div class="total-box">
+
+<div>Total Order Amount</div>
+
+<div class="total" id="orderTotal">
+₹0
+</div>
+
+</div>
 
 <br>
 
-<button class="primary" onclick="saveOrder()">
-Save Order
+<button class="primary" style="width:100%;" onclick="saveOrder()">
+✓ SAVE COMPLETE ORDER
 </button>
 
 </div>
 
 </div>
 
+
+<!-- ORDER HISTORY -->
+
+<div id="history" class="hidden">
+
+<div class="card">
+
+<h2>Order History</h2>
+
+<div id="historyList"></div>
+
 </div>
+
+</div>
+
+</div>
+
 
 <script>
 
@@ -284,35 +497,347 @@ let orders = JSON.parse(
   localStorage.getItem("hala_orders") || "[]"
 );
 
+let currentOrder = [];
+
+
+/* PRODUCT MASTER */
+
+const products = [
+  {
+    name:"Bathroom Cleaner",
+    price:30
+  },
+  {
+    name:"Floor Cleaner",
+    price:30
+  },
+  {
+    name:"Dish Wash",
+    price:30
+  },
+  {
+    name:"Toilet Cleaner",
+    price:30
+  },
+  {
+    name:"Car Wash",
+    price:30
+  },
+  {
+    name:"Detergent Liquid",
+    price:30
+  },
+  {
+    name:"Glass Cleaner",
+    price:30
+  },
+  {
+    name:"Room Freshener",
+    price:30
+  }
+];
+
+
+/* PAGE SYSTEM */
+
 function showPage(page){
 
-  document.getElementById("dashboard").classList.add("hidden");
-  document.getElementById("store").classList.add("hidden");
-  document.getElementById("order").classList.add("hidden");
+  document.getElementById("dashboard")
+    .classList.add("hidden");
 
-  document.getElementById(page).classList.remove("hidden");
+  document.getElementById("store")
+    .classList.add("hidden");
+
+  document.getElementById("order")
+    .classList.add("hidden");
+
+  document.getElementById("history")
+    .classList.add("hidden");
+
+  document.getElementById(page)
+    .classList.remove("hidden");
 
   updateDashboard();
+
+  if(page==="history"){
+    renderHistory();
+  }
+
+  if(page==="order"){
+    renderProducts();
+    renderCurrentOrder();
+  }
+
 }
+
+
+/* PRODUCTS */
+
+function renderProducts(){
+
+  const box =
+    document.getElementById("products");
+
+  box.innerHTML="";
+
+  products.forEach((product,index)=>{
+
+    const card=document.createElement("div");
+
+    card.className="product-card";
+
+    card.innerHTML=`
+
+      <div class="product-top">
+
+        <div class="product-name">
+          ${product.name}
+        </div>
+
+        <div class="small">
+          Base ₹${product.price}
+        </div>
+
+      </div>
+
+      <div class="product-controls">
+
+        <div>
+          <label>Quantity</label>
+
+          <input
+            id="qty_${index}"
+            type="number"
+            min="1"
+            value="1"
+          >
+        </div>
+
+        <div>
+          <label>Rate ₹</label>
+
+          <input
+            id="rate_${index}"
+            type="number"
+            min="0"
+            value="${product.price}"
+          >
+        </div>
+
+      </div>
+
+      <button
+        class="primary add-btn"
+        onclick="addToOrder(${index})"
+      >
+        + Add to Order
+      </button>
+
+    `;
+
+    box.appendChild(card);
+
+  });
+
+}
+
+
+/* ADD PRODUCT WITHOUT PAGE CHANGE */
+
+function addToOrder(index){
+
+  const product=products[index];
+
+  const qtyInput =
+    document.getElementById("qty_"+index);
+
+  const rateInput =
+    document.getElementById("rate_"+index);
+
+  const quantity =
+    parseInt(qtyInput.value) || 0;
+
+  const rate =
+    parseFloat(rateInput.value) || 0;
+
+  if(quantity<=0){
+
+    alert("Please enter valid quantity.");
+
+    return;
+  }
+
+  if(rate<0){
+
+    alert("Please enter valid rate.");
+
+    return;
+  }
+
+  const existing =
+    currentOrder.find(
+      item => item.name === product.name
+    );
+
+  if(existing){
+
+    existing.quantity += quantity;
+    existing.rate = rate;
+    existing.amount =
+      existing.quantity * existing.rate;
+
+  }else{
+
+    currentOrder.push({
+
+      name:product.name,
+
+      quantity:quantity,
+
+      rate:rate,
+
+      amount:quantity*rate
+
+    });
+
+  }
+
+  renderCurrentOrder();
+
+  /*
+   IMPORTANT:
+   No showPage() here.
+   Therefore page will NOT move/slide.
+  */
+
+  document.getElementById("orderItems")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"nearest"
+    });
+
+}
+
+
+/* CURRENT ORDER */
+
+function renderCurrentOrder(){
+
+  const box =
+    document.getElementById("orderItems");
+
+  const totalBox =
+    document.getElementById("orderTotal");
+
+  if(currentOrder.length===0){
+
+    box.innerHTML=`
+      <div class="empty">
+        No products added yet.
+      </div>
+    `;
+
+    totalBox.textContent="₹0";
+
+    return;
+  }
+
+  box.innerHTML="";
+
+  let total=0;
+
+  currentOrder.forEach((item,index)=>{
+
+    total += item.amount;
+
+    const div =
+      document.createElement("div");
+
+    div.className="order-item";
+
+    div.innerHTML=`
+
+      <div class="order-item-top">
+
+        <div class="order-item-name">
+          ${item.name}
+        </div>
+
+        <button
+          class="danger"
+          onclick="removeOrderItem(${index})"
+        >
+          Remove
+        </button>
+
+      </div>
+
+      <div class="order-item-details">
+
+        ${item.quantity} × ₹${item.rate.toFixed(2)}
+
+        =
+
+        <strong>
+          ₹${item.amount.toFixed(2)}
+        </strong>
+
+      </div>
+
+    `;
+
+    box.appendChild(div);
+
+  });
+
+  totalBox.textContent =
+    "₹"+total.toFixed(2);
+
+}
+
+
+/* REMOVE ITEM */
+
+function removeOrderItem(index){
+
+  currentOrder.splice(index,1);
+
+  renderCurrentOrder();
+
+}
+
+
+/* SAVE STORE */
 
 function saveStore(){
 
   const storeName =
-    document.getElementById("storeName").value.trim();
+    document.getElementById("storeName")
+      .value.trim();
 
   const ownerName =
-    document.getElementById("ownerName").value.trim();
+    document.getElementById("ownerName")
+      .value.trim();
 
   const phone =
-    document.getElementById("phone").value.trim();
+    document.getElementById("phone")
+      .value.trim();
 
   const pincode =
-    document.getElementById("pincode").value.trim();
+    document.getElementById("pincode")
+      .value.trim();
 
   const address =
-    document.getElementById("address").value.trim();
+    document.getElementById("address")
+      .value.trim();
 
-  if(!storeName || !ownerName || !phone || !pincode || !address){
+  if(
+    !storeName ||
+    !ownerName ||
+    !phone ||
+    !pincode ||
+    !address
+  ){
 
     alert("Please fill all required fields.");
 
@@ -320,23 +845,30 @@ function saveStore(){
   }
 
   stores.push({
-    storeName,
-    ownerName,
-    phone,
-    pincode,
-    address,
-    location:
-      document.getElementById("location").value.trim(),
 
-    createdAt:new Date().toISOString()
+    storeName,
+
+    ownerName,
+
+    phone,
+
+    pincode,
+
+    address,
+
+    location:
+      document.getElementById("location")
+        .value.trim(),
+
+    createdAt:
+      new Date().toISOString()
+
   });
 
   localStorage.setItem(
     "hala_stores",
     JSON.stringify(stores)
   );
-
-  alert("Store saved successfully!");
 
   document.getElementById("storeName").value="";
   document.getElementById("ownerName").value="";
@@ -345,9 +877,123 @@ function saveStore(){
   document.getElementById("address").value="";
   document.getElementById("location").value="";
 
+  const success =
+    document.getElementById("storeSuccess");
+
+  success.style.display="block";
+
+  setTimeout(()=>{
+    success.style.display="none";
+  },3000);
+
   updateDashboard();
+
 }
 
-const products = [
-"Bathroom Cleaner",
-"
+
+/* SAVE ORDER */
+
+function saveOrder(){
+
+  const store =
+    document.getElementById("orderStore")
+      .value.trim();
+
+  const employee =
+    document.getElementById("employeeId")
+      .value.trim();
+
+  if(!store){
+
+    alert("Please enter Store Name.");
+
+    return;
+  }
+
+  if(currentOrder.length===0){
+
+    alert("Please add at least one product.");
+
+    return;
+  }
+
+  let total=0;
+
+  currentOrder.forEach(item=>{
+    total += item.amount;
+  });
+
+  const order={
+
+    id:
+      "HALA-"+Date.now(),
+
+    store,
+
+    employee,
+
+    items:
+      JSON.parse(
+        JSON.stringify(currentOrder)
+      ),
+
+    total,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+  orders.push(order);
+
+  localStorage.setItem(
+    "hala_orders",
+    JSON.stringify(orders)
+  );
+
+  alert(
+    "Order saved successfully!\n\n"+
+    "Order ID: "+order.id+
+    "\nTotal: ₹"+total.toFixed(2)
+  );
+
+  currentOrder=[];
+
+  document.getElementById("orderStore")
+    .value="";
+
+  document.getElementById("employeeId")
+    .value="";
+
+  renderCurrentOrder();
+
+  updateDashboard();
+
+}
+
+
+/* DASHBOARD */
+
+function updateDashboard(){
+
+  document.getElementById("storeCount")
+    .textContent=stores.length;
+
+  const today =
+    new Date().toISOString().slice(0,10);
+
+  const todayOrders =
+    orders.filter(order =>
+      order.createdAt.slice(0,10)===today
+    );
+
+  document.getElementById("orderCount")
+    .textContent=todayOrders.length;
+
+  let sales=0;
+
+  todayOrders.forEach(order=>{
+    sales += Number(order.total)||0;
+  });
+
+  document.get
