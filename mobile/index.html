@@ -702,15 +702,11 @@ function addToOrder(index){
 
   }
 
-  renderCurrentOrder();
+  const savedScrollY = window.scrollY;
 
-  /*
-   IMPORTANT:
-   No showPage() here.
-   Therefore page will NOT move/slide.
-  */
+renderCurrentOrder();
 
-  document.getElementById("orderItems")
+window.scrollTo(0, savedScrollY);
   
 
 }
