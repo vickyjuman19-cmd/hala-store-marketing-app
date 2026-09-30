@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HALA Store Marketing</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7f6;
+  color:#173330;
+}
+
+.header{
+  background:linear-gradient(135deg,#075e54,#0f9d8a);
+  color:white;
+  padding:25px 18px;
+  border-radius:0 0 25px 25px;
+}
+
+.header h1{
+  font-size:26px;
+}
+
+.header p{
+  margin-top:6px;
+  opacity:.9;
+}
+
+.container{
+  max-width:750px;
+  margin:auto;
+  padding:18px;
+}
+
+.menu{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  margin-bottom:18px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:13px 18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary{
+  background:#087f70;
+  color:white;
+}
+
+.secondary{
+  background:#dff2ee;
+  color:#075e54;
+}
+
+.card{
+  background:white;
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+h2{
+  margin-bottom:15px;
+  font-size:20px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.stat{
+  background:white;
+  padding:18px;
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,.07);
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+
+label{
+  display:block;
+  margin-top:12px;
+  margin-bottom:5px;
+  font-weight:bold;
+  font-size:14px;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:12px;
+  border:1px solid #d5dfdd;
+  border-radius:10px;
+  font-size:15px;
+}
+
+textarea{
+  min-height:80px;
+}
+
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.hidden{
+  display:none;
+}
+
+@media(max-width:550px){
+  .form-row{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>HALA Store Marketing</h1>
+  <p>Store Visit • Order • Sales Management</p>
+</div>
+
+<div class="container">
+
+<div class="menu">
+  <button class="primary" onclick="showPage('dashboard')">
+    Dashboard
+  </button>
+
+  <button class="secondary" onclick="showPage('store')">
+    + Add Store
+  </button>
+
+  <button class="secondary" onclick="showPage('order')">
+    + New Order
+  </button>
+</div>
+
+<div id="dashboard">
+
+<div class="stats">
+
+<div class="stat">
+  Total Stores
+  <strong id="storeCount">0</strong>
+</div>
+
+<div class="stat">
+  Today's Orders
+  <strong id="orderCount">0</strong>
+</div>
+
+<div class="stat">
+  Today's Sales
+  <strong id="sales">₹0</strong>
+</div>
+
+<div class="stat">
+  Follow-ups
+  <strong id="followups">0</strong>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:15px;">
+<h2>HALA Salesman App</h2>
+
+<p>1. Add new shop</p>
+<br>
+
+<p>2. Capture shop details</p>
+<br>
+
+<p>3. Create product order</p>
+<br>
+
+<p>4. Maintain complete order history</p>
+
+</div>
+
+</div>
+
+<div id="store" class="hidden">
+
+<div class="card">
+
+<h2>Add New Store</h2>
+
+<label>Store Name *</label>
+<input id="storeName" placeholder="Enter shop name">
+
+<label>Shop Owner Name *</label>
+<input id="ownerName" placeholder="Enter owner name">
+
+<div class="form-row">
+
+<div>
+<label>Contact Number *</label>
+<input id="phone" type="tel" placeholder="10 digit mobile">
+</div>
+
+<div>
+<label>Pincode *</label>
+<input id="pincode" inputmode="numeric" placeholder="412101">
+</div>
+
+</div>
+
+<label>Area / Address *</label>
+<textarea id="address" placeholder="Enter complete shop address"></textarea>
+
+<label>Map Location</label>
+<input id="location" placeholder="GPS / Google Maps location">
+
+<br><br>
+
+<button class="primary" onclick="saveStore()">
+Save Store
+</button>
+
+</div>
+
+</div>
+
+<div id="order" class="hidden">
+
+<div class="card">
+
+<h2>Create New Order</h2>
+
+<label>Store Name</label>
+<input id="orderStore" placeholder="Enter store name">
+
+<label>Salesman Employee ID</label>
+<input id="employeeId" placeholder="Employee ID">
+
+<h3 style="margin-top:20px;">
+Products
+</h3>
+
+<div id="products"></div>
+
+<br>
+
+<button class="primary" onclick="saveOrder()">
+Save Order
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let stores = JSON.parse(
+  localStorage.getItem("hala_stores") || "[]"
+);
+
+let orders = JSON.parse(
+  localStorage.getItem("hala_orders") || "[]"
+);
+
+function showPage(page){
+
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("store").classList.add("hidden");
+  document.getElementById("order").classList.add("hidden");
+
+  document.getElementById(page).classList.remove("hidden");
+
+  updateDashboard();
+}
+
+function saveStore(){
+
+  const storeName =
+    document.getElementById("storeName").value.trim();
+
+  const ownerName =
+    document.getElementById("ownerName").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const pincode =
+    document.getElementById("pincode").value.trim();
+
+  const address =
+    document.getElementById("address").value.trim();
+
+  if(!storeName || !ownerName || !phone || !pincode || !address){
+
+    alert("Please fill all required fields.");
+
+    return;
+  }
+
+  stores.push({
+    storeName,
+    ownerName,
+    phone,
+    pincode,
+    address,
+    location:
+      document.getElementById("location").value.trim(),
+
+    createdAt:new Date().toISOString()
+  });
+
+  localStorage.setItem(
+    "hala_stores",
+    JSON.stringify(stores)
+  );
+
+  alert("Store saved successfully!");
+
+  document.getElementById("storeName").value="";
+  document.getElementById("ownerName").value="";
+  document.getElementById("phone").value="";
+  document.getElementById("pincode").value="";
+  document.getElementById("address").value="";
+  document.getElementById("location").value="";
+
+  updateDashboard();
+}
+
+const products = [
+"Bathroom Cleaner",
+"
