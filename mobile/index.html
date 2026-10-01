@@ -1187,9 +1187,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
     localStorage.setItem("halaLoggedIn","yes");
 
-    document.getElementById("loginScreen").style.display = "none";
+    
+document.getElementById("loginScreen").style.display = "none";
 
-    alert("Login Successful");
+const header = document.querySelector(".header");
+const container = document.querySelector(".container");
+
+if(header) header.style.display = "block";
+if(container) container.style.display = "block";
+
+showPage("dashboard");
+
+alert("Login Successful");
 
   }else{
 
@@ -1209,7 +1218,7 @@ function logoutUser(){
 
 }
 
-});
+
 </script>
 
 </body>
